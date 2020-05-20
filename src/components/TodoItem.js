@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useCallback } from "react";
 import styled, { css } from "styled-components";
 import { MdDone, MdDelete } from "react-icons/md";
+import { UseTodoDispatch } from "../TodoContext";
 
 const Remove = styled.div`
   opacity: 0;
@@ -57,16 +58,35 @@ const TodoItemBlock = styled.div`
   }
 `;
 
-function TodoItem({ id, done, text }) {
+function TodoItem({ todo }) {
+  const dispatch = UseTodoDispatch();
+  const { text, done, id } = todo;
+  console.log("TodoItem동작됨?");
+  const onToggle = useCallback(() => {
+    dispatch({
+      type: "TOGGLE",
+      id: id,
+    });
+  }, [dispatch, id]);
+
+  const onRemove = useCallback(() => {
+    dispatch({
+      type: "REMOVE",
+      id: id,
+    });
+  }, [dispatch, id]);
+
   return (
     <TodoItemBlock>
-      <CheckCircle done={done}>{done && <MdDone />}</CheckCircle>
+      <CheckCircle done={done} onClick={onToggle}>
+        {done && <MdDone />}
+      </CheckCircle>
       <Text done={done}>{text}</Text>
-      <Remove>
+      <Remove onClick={onRemove}>
         <MdDelete />
       </Remove>
     </TodoItemBlock>
   );
 }
 
-export default TodoItem;
+export default React.memo(TodoItem);

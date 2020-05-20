@@ -16,10 +16,11 @@ const TodoTemplateBlock = styled.div`
 `;
 
 function TodoTemplate({ children }) {
+  console.log("TodoTemplate동작됨?");
   return (
     <>
       <TodoTemplateBlock>{children}</TodoTemplateBlock>
     </>
   );
 }
-export default TodoTemplate;
+export default React.memo(TodoTemplate);
